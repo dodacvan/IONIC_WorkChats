@@ -80,6 +80,21 @@ appControllers.controller('ChatDetailCtrl', function ($rootScope, $localStorage,
 });
 
 appControllers.controller('AccountCtrl', function ($scope) {
+  firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    $scope.useremail = user.email;
+    $scope.userId = user.uid;
+	var userId = user.uid;
+	return firebase.database().ref('/Users/' + userId).once('value').then(function(snapshot)
+	  $scope.userphone = snapshot.val().phone;
+	  $scope.usersex = snapshot.val().sex;
+	  $scope.useraddress = snapshot.val().address;
+	  $scope.username = snapshot.val().name;
+	});
+  } else {
+    console.log('not log in');
+  }
+});
 	$scope.settings = {
 		enableFriends: true
 	};
